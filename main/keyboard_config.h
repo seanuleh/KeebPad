@@ -45,7 +45,7 @@
 #define ENCODER_S_PIN GPIO_NUM_17// encoder switch pin
 
 //OLED Parameters
-// #define OLED_ENABLE //undefine if no oled is used
+#define OLED_ENABLE //undefine if no oled is used
 #define ROTATION DEG270
 #define OLED_SDA_PIN GPIO_NUM_21
 #define OLED_SCL_PIN GPIO_NUM_22

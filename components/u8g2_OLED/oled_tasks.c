@@ -39,6 +39,10 @@
 #include "battery_monitor.h"
 #include "nvs_keymaps.h"
 
+#include "Arduino_ESP32SPI.h"
+#include "Arduino_GFX.h"     // Core graphics library
+#include "Arduino_ST7789.h"
+
 static const char *TAG = "	OLED";
 
 u8g2_t u8g2; // a structure which will contain all the data for one display
@@ -59,6 +63,8 @@ int DROP_H = 0;
 int offset_x_batt = 0;
 int offset_y_batt = 0;
 
+Arduino_DataBus *bus;
+Arduino_ST7789 *tft;
 
 #define BT_ICON 0x5e
 #define BATT_ICON 0x5b
@@ -280,29 +286,48 @@ void deinit_oled(void) {
 //initialize oled
 void init_oled(const u8g2_cb_t *rotation) {
 
-	layer_recieve_q = xQueueCreate(32, sizeof(uint8_t));
-	led_recieve_q = xQueueCreate(32, sizeof(uint8_t));
-	ESP_LOGI(TAG, "Setting up oled");
+	ESP_LOGI("Oled", "init OLED function");
 
-	u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
-	u8g2_esp32_hal.sda = OLED_SDA_PIN;
-	u8g2_esp32_hal.scl = OLED_SCL_PIN;
-	u8g2_esp32_hal_init(u8g2_esp32_hal);
+	*bus = Arduino_ESP32SPI(16, 5, 18, 19, -1, VSPI);
+	*tft = Arduino_ST7789(bus, -1, 1, true, 135, 240, 53, 40, 52, 40);
 
-	if((rotation == DEG90) || rotation == DEG270){
+	(*tft).begin();
+  	(*tft).fillScreen(BLACK);
 
-		offset_x_batt = -85;
-		offset_y_batt = 120;
+	(*tft).setCursor(10, 10);
+  	(*tft).setTextColor(RED);
+  	(*tft).println("I am on!");
 
-	}
+	// u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
+	// u8g2_esp32_hal.clk   = 18;
+	// u8g2_esp32_hal.mosi  = 19;
+	// u8g2_esp32_hal.cs    = 5;
+	// u8g2_esp32_hal.dc    = 16;
+	// u8g2_esp32_hal.reset = -1;
+	// u8g2_esp32_hal_init(u8g2_esp32_hal);
 
-	u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2, rotation,
-			u8g2_esp32_i2c_byte_cb, u8g2_esp32_gpio_and_delay_cb); // init u8g2 structure
+	// ESP_LOGI("Oled", "init OLED function 2");
 
-	u8x8_SetI2CAddress(&u8g2.u8x8, 0x78);
-	u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
-	u8g2_SetPowerSave(&u8g2, 0); // wake up display
+	// u8g2_t u8g2; // a structure which will contain all the data for one display
+	// u8g2_Setup_ssd1306_128x64_noname_f(
+	// 	&u8g2,
+	// 	U8G2_R0,
+	// 	u8g2_esp32_spi_byte_cb,
+	// 	u8g2_esp32_gpio_and_delay_cb);  // init u8g2 structure
 
-	u8g2_ClearBuffer(&u8g2);
+	// ESP_LOGI("Oled", "init OLED function 3");
 
+	// u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
+
+	// ESP_LOGI("Oled", "init OLED function 4");
+	// u8g2_SetPowerSave(&u8g2, 0); // wake up display
+	// u8g2_ClearBuffer(&u8g2);
+	// u8g2_DrawBox(&u8g2, 10,20, 20, 30);
+	// u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr);
+	// u8g2_DrawStr(&u8g2, 0,15,"Hello World!");
+	// u8g2_SendBuffer(&u8g2);
+	// ESP_LOGI("Oled", "Done");
+	ESP_LOGI("OLED", "All done!");
+
+	vTaskDelete(NULL);
 }

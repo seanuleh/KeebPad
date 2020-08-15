@@ -349,6 +349,8 @@ extern "C" void app_main() {
 	ESP_LOGI("Keyboard task", "initializezd");
 #endif
 	//activate oled
+
+	ESP_LOGI("Oled", "activating OLED");
 #ifdef	OLED_ENABLE
 	init_oled(ROTATION);
 	xTaskCreatePinnedToCore(oled_task, "oled task", 4096, NULL,
