@@ -63,9 +63,11 @@ int DROP_H = 0;
 int offset_x_batt = 0;
 int offset_y_batt = 0;
 
-Arduino_DataBus *bus;
-Arduino_ST7789 *tft;
+Arduino_DataBus *bus = new Arduino_ESP32SPI(16, 5, 18, 19, -1, VSPI);
+Arduino_ST7789 *tft = new Arduino_ST7789(bus, -1, 1, true, 135, 240, 53, 40, 52, 40);
 
+
+	
 #define BT_ICON 0x5e
 #define BATT_ICON 0x5b
 #define LOCK_ICON 0xca
@@ -118,12 +120,12 @@ void update_oled(void) {
 		char buf[sizeof(uint32_t)];
 		snprintf(buf, sizeof(uint32_t), "%d", battery_percent);
 		u8g2_DrawStr(&u8g2, 103 + offset_x_batt , 7 + offset_y_batt, "%");
-		if ((battery_percent < 100)
-				&& (abs(battery_percent - prev_battery_percent) >= 2)) {
-			erase_area(85 + offset_x_batt , 0 + offset_y_batt, 15, 7);
-			u8g2_DrawStr(&u8g2, 90 + offset_x_batt , 7 + offset_y_batt, buf);
-			u8g2_SendBuffer(&u8g2);
-		}
+		// if ((battery_percent < 100)
+		// 		&& (abs(battery_percent - prev_battery_percent) >= 2)) {
+		// 	erase_area(85 + offset_x_batt , 0 + offset_y_batt, 15, 7);
+		// 	u8g2_DrawStr(&u8g2, 90 + offset_x_batt , 7 + offset_y_batt, buf);
+		// 	u8g2_SendBuffer(&u8g2);
+		// }
 		if ((battery_percent > 100) && (BATT_FLAG = 0)) {
 			erase_area(85  + offset_x_batt, 0 + offset_y_batt, 15, 7);
 			u8g2_DrawStr(&u8g2, 85 + offset_x_batt, 7 + offset_y_batt, "100");
@@ -288,15 +290,12 @@ void init_oled(const u8g2_cb_t *rotation) {
 
 	ESP_LOGI("Oled", "init OLED function");
 
-	*bus = Arduino_ESP32SPI(16, 5, 18, 19, -1, VSPI);
-	*tft = Arduino_ST7789(bus, -1, 1, true, 135, 240, 53, 40, 52, 40);
+	tft->begin();
+  	tft->fillScreen(BLACK);
 
-	(*tft).begin();
-  	(*tft).fillScreen(BLACK);
-
-	(*tft).setCursor(10, 10);
-  	(*tft).setTextColor(RED);
-  	(*tft).println("I am on!");
+	tft->setCursor(10, 10);
+  	tft->setTextColor(RED);
+  	tft->println("I am on!");
 
 	// u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
 	// u8g2_esp32_hal.clk   = 18;
