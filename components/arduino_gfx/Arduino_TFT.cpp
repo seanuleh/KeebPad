@@ -908,7 +908,7 @@ void Arduino_TFT::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color
     int8_t xo = pgm_read_byte(&glyph->xOffset),
            yo = pgm_read_byte(&glyph->yOffset);
     uint8_t xx, yy, bits = 0, bit = 0;
-    int16_t xo16 =0, yo16 = 0;
+    int16_t xo16 = 0, yo16 = 0;
 
     if (xAdvance < w)
     {

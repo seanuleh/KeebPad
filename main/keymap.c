@@ -96,7 +96,7 @@ uint16_t default_slave_encoder_map[LAYERS][ENCODER_SIZE] = {
 			//   {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
 			{KC_1,    KC_2,    KC_3,    KC_4},
 			{KC_Q,    KC_W,    KC_E,    KC_R},
-			{KC_A,    KC_S,    KC_D,    KC_F},
+			{KC_A,    KC_S,    RAISE,    LOWER},
 	};
 
 	 uint16_t _NUM[MATRIX_ROWS][KEYMAP_COLS]={
@@ -125,7 +125,7 @@ uint16_t default_slave_encoder_map[LAYERS][ENCODER_SIZE] = {
 			//   {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
 			{KC_1,    KC_2,    KC_3,    KC_4},
 			{KC_Q,    KC_W,    KC_E,    KC_R},
-			{KC_A,    KC_S,    KC_D,    KC_F},
+			{KC_A,    KC_S,    RAISE,    LOWER},
 
 	};
 
@@ -155,7 +155,7 @@ uint16_t default_slave_encoder_map[LAYERS][ENCODER_SIZE] = {
 				//   {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
 				{KC_1,    KC_2,    KC_3,    KC_4},
 				{KC_Q,    KC_W,    KC_E,    KC_R},
-				{KC_A,    KC_S,    KC_D,    KC_F},
+				{KC_A,    KC_S,    RAISE,    LOWER},
 		};
  //Create an array that points to the various keymaps
 uint16_t (*default_layouts[])[MATRIX_ROWS][KEYMAP_COLS] = { &_QWERTY, &_NUM,

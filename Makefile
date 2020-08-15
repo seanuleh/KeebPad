@@ -8,5 +8,6 @@ PROJECT_NAME := MK32
 COMPONENT_ADD_INCLUDEDIRS := components/include	\							
 
 CFLAGS += -Wno-unused-const-variable
+CFLAGS += -Wno-narrowing
 
 include $(IDF_PATH)/make/project.mk

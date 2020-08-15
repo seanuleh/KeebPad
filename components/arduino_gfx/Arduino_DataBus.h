@@ -5,7 +5,11 @@
 #ifndef _Arduino_DataBus_H_
 #define _Arduino_DataBus_H_
 
+#if ARDUINO >= 100
 #include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
 class Arduino_DataBus
 {
@@ -39,7 +43,7 @@ public:
     virtual void sendData32(uint32_t d) = 0;
 
 protected:
-    uint8_t _dataMode;
+    int8_t _dataMode;
 };
 
 #endif

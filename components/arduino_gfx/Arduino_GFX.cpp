@@ -15,7 +15,6 @@
 #include <pgmspace.h>
 #endif
 
-
 /**************************************************************************/
 /*!
     @brief  Instatiate a GFX context for graphics! Can only be done by a superclass
@@ -1463,7 +1462,8 @@ void Arduino_GFX::draw24bitRGBBitmap(int16_t x, int16_t y,
     {
         for (int16_t i = 0; i < w; i++)
         {
-            writePixel(x + i, y, color565(pgm_read_byte(&bitmap[offset+1]), pgm_read_byte(&bitmap[offset+1]), pgm_read_byte(&bitmap[offset+1])));
+            offset++;
+            writePixel(x + i, y, color565(pgm_read_byte(&bitmap[offset]), pgm_read_byte(&bitmap[offset]), pgm_read_byte(&bitmap[offset])));
         }
     }
     endWrite();
@@ -1488,7 +1488,8 @@ void Arduino_GFX::draw24bitRGBBitmap(int16_t x, int16_t y,
     {
         for (int16_t i = 0; i < w; i++)
         {
-            writePixel(x + i, y, color565(bitmap[offset+1], bitmap[offset+1], bitmap[offset+1]));
+            offset++;
+            writePixel(x + i, y, color565(bitmap[offset], bitmap[offset], bitmap[offset]));
         }
     }
     endWrite();
@@ -1529,7 +1530,8 @@ void Arduino_GFX::draw24bitRGBBitmap(int16_t x, int16_t y,
             }
             if (byte & 0x80)
             {
-                writePixel(x + i, y, color565(pgm_read_byte(&bitmap[offset+1]), pgm_read_byte(&bitmap[offset+1]), pgm_read_byte(&bitmap[offset+1])));
+                offset++;
+                writePixel(x + i, y, color565(pgm_read_byte(&bitmap[offset]), pgm_read_byte(&bitmap[offset]), pgm_read_byte(&bitmap[offset])));
             }
             else
             {
@@ -1574,7 +1576,8 @@ void Arduino_GFX::draw24bitRGBBitmap(int16_t x, int16_t y,
             }
             if (byte & 0x80)
             {
-                writePixel(x + i, y, color565(bitmap[offset+1], bitmap[offset+1], bitmap[offset+1]));
+                offset++;
+                writePixel(x + i, y, color565(bitmap[offset], bitmap[offset], bitmap[offset]));
             }
             else
             {
