@@ -42,6 +42,8 @@
 #include "Arduino_GFX.h"     // Core graphics library
 #include "Arduino_ST7789.h"
 
+#include "icons.h"
+
 static const char *TAG = "	OLED";
 
 Arduino_DataBus *bus;
@@ -67,10 +69,11 @@ int offset_y_batt = 0;
 #define BT_ICON 0x5e
 #define BATT_ICON 0x5b
 #define LOCK_ICON 0xca
+#define TFT_BL 4 // Backlight Control Pin
 
 //Erasing area from oled
 void erase_area(uint8_t x, uint8_t y, uint8_t w, uint8_t h) {
-	  tft->fillRect(x, y, w, h, BLACK);
+	  tft->fillRect(x, y, w, h, RED);
 }
 
 //Function for updating the OLED
@@ -79,11 +82,12 @@ void update_oled(void) {
 	battery_percent = get_battery_level();
 #endif
 
-	// if (xQueueReceive(layer_recieve_q, &curr_layout, (TickType_t) 0)) {
-	// 	erase_area(0, 7, 45, 7);
-	// 	tft->setCursor(0, 14);
-	// 	tft->println(layer_names_arr[curr_layout]);
-	// }
+	if (xQueueReceive(layer_recieve_q, &curr_layout, (TickType_t) 0)) {
+		erase_area(0, 0, 45, 45);
+		tft->setCursor(0, 14);
+		tft->println(layer_names_arr[curr_layout]);
+		ESP_LOGI("SEAN", "Received Task");
+	}
 	// // if (xQueueReceive(led_recieve_q, &current_led, (TickType_t) 0)) {
 	// 	// erase_area(0, 24, 127, 8);
 	// 	// if (CHECK_BIT(current_led,0) != 0) {
@@ -286,49 +290,34 @@ void init_oled() {
 
 	ESP_LOGI("Oled", "init OLED function");
 
+	layer_recieve_q = xQueueCreate(32, sizeof(uint8_t));
+	led_recieve_q = xQueueCreate(32, sizeof(uint8_t));
+
 	bus = new Arduino_ESP32SPI(16, 5, 18, 19, -1, VSPI);
 	tft = new Arduino_ST7789(bus, -1, 1, true, 135, 240, 53, 40, 52, 40);
 
-	tft->begin();
-  	tft->fillScreen(BLACK);
+    tft->begin();
+    tft->fillScreen(BLACK);
+    pinMode(TFT_BL, OUTPUT);
+    digitalWrite(TFT_BL, HIGH);
 
-    pinMode(4, OUTPUT);
-    digitalWrite(4, HIGH);
+    tft->fillRect(0, 0, 240, 140, BLACK);
+    tft->setCursor(84, 5);
+    tft->setTextSize(2);
+    tft->setTextColor(BLUE);
+    tft->println("KeebPad");
+    
+    int x = 24, y = 32;
+    while (x < 300) {
+      while (y < 300) {
+        tft->draw16bitRGBBitmap(x, y, whatsApp, 32, 32);  
+        y = y + 32;
+      }
+      x = x + 32 + 24;
+      y = 32;
+    }
 
-	tft->setCursor(10, 10);
-  	tft->setTextColor(RED);
-  	tft->println("I am on!");
-
-	// u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
-	// u8g2_esp32_hal.clk   = 18;
-	// u8g2_esp32_hal.mosi  = 19;
-	// u8g2_esp32_hal.cs    = 5;
-	// u8g2_esp32_hal.dc    = 16;
-	// u8g2_esp32_hal.reset = -1;
-	// u8g2_esp32_hal_init(u8g2_esp32_hal);
-
-	// ESP_LOGI("Oled", "init OLED function 2");
-
-	// u8g2_t u8g2; // a structure which will contain all the data for one display
-	// u8g2_Setup_ssd1306_128x64_noname_f(
-	// 	&u8g2,
-	// 	U8G2_R0,
-	// 	u8g2_esp32_spi_byte_cb,
-	// 	u8g2_esp32_gpio_and_delay_cb);  // init u8g2 structure
-
-	// ESP_LOGI("Oled", "init OLED function 3");
-
-	// u8g2_InitDisplay(&u8g2); // send init sequence to the display, display is in sleep mode after this,
-
-	// ESP_LOGI("Oled", "init OLED function 4");
-	// u8g2_SetPowerSave(&u8g2, 0); // wake up display
-	// u8g2_ClearBuffer(&u8g2);
-	// u8g2_DrawBox(&u8g2, 10,20, 20, 30);
-	// u8g2_SetFont(&u8g2, u8g2_font_ncenB14_tr);
-	// u8g2_DrawStr(&u8g2, 0,15,"Hello World!");
-	// u8g2_SendBuffer(&u8g2);
-	// ESP_LOGI("Oled", "Done");
 	ESP_LOGI("OLED", "All done!");
 
-	vTaskDelete(NULL);
+	// vTaskDelete(NULL);
 }

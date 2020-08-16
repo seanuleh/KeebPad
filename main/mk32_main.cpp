@@ -53,6 +53,7 @@
 #include "battery_monitor.h"
 #include "nvs_funcs.h"
 #include "nvs_keymaps.h"
+#include "oled_tasks.h"
 
 #define KEY_REPORT_TAG "KEY_REPORT"
 #define SYSTEM_REPORT_TAG "KEY_REPORT"
@@ -353,6 +354,7 @@ extern "C" void app_main() {
 	ESP_LOGI("Oled", "activating OLED");
 #ifdef	OLED_ENABLE
 	init_oled();
+	ESP_LOGI("Oled", "Creating Task Pinned To Core");
 	xTaskCreatePinnedToCore(oled_task, "oled task", 4096, NULL,
 			configMAX_PRIORITIES, &xOledTask, 1);
 	ESP_LOGI("Oled", "initializezd");

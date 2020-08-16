@@ -200,8 +200,8 @@ uint8_t *check_key_state(uint16_t **keymap) {
 							current_layout = (keycode - LAYER_HOLD_BASE_VAL);
 							layer_hold_flag = 1;
 #ifdef OLED_ENABLE
-						xQueueSend(layer_recieve_q, &current_layout,
-								(TickType_t) 0);
+						// xQueueSend(layer_recieve_q, &current_layout,
+						// 		(TickType_t) 0);
 #endif
 						ESP_LOGI(KEY_PRESS_TAG,
 								"Layer modified!, Current layer: %d ",
@@ -258,8 +258,8 @@ uint8_t *check_key_state(uint16_t **keymap) {
 						current_layout = 0;
 						layer_hold_flag = 0;
 #ifdef OLED_ENABLE
-						xQueueSend(layer_recieve_q, &current_layout,
-								(TickType_t) 0);
+						// xQueueSend(layer_recieve_q, &current_layout,
+						// 		(TickType_t) 0);
 #endif
 						ESP_LOGI(KEY_PRESS_TAG,
 								"Layer modified!, Current layer: %d ",

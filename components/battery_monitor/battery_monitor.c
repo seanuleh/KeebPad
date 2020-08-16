@@ -38,7 +38,7 @@
 #define NO_OF_SAMPLES   500          //Multisampling
 
 static const adc_channel_t channel = BATT_PIN;
-static const adc_atten_t atten = ADC_ATTEN_DB_2_5;
+static const adc_atten_t atten = ADC_ATTEN_DB_6;
 static const adc_unit_t unit = ADC_UNIT_1;
 
 uint32_t voltage = 0;
