@@ -43,6 +43,7 @@
 #include "Arduino_ST7789.h"
 
 #include "icons.h"
+#include "Syncopate_font.h"
 
 static const char *TAG = "	OLED";
 
@@ -302,20 +303,25 @@ void init_oled() {
     digitalWrite(TFT_BL, HIGH);
 
     tft->fillRect(0, 0, 240, 140, BLACK);
-    tft->setCursor(84, 5);
-    tft->setTextSize(2);
+    tft->setCursor(64, 10);
+    tft->setTextSize(1);
     tft->setTextColor(BLUE);
+	tft->setFont(&Syncopate_Bold_16);
     tft->println("KeebPad");
     
-    int x = 24, y = 32;
-    while (x < 300) {
-      while (y < 300) {
-        tft->draw16bitRGBBitmap(x, y, whatsApp, 32, 32);  
-        y = y + 32;
-      }
-      x = x + 32 + 24;
-      y = 32;
-    }
+    tft->draw16bitRGBBitmap(14, 24, whatsApp, 32, 32);
+	tft->draw16bitRGBBitmap(74, 24, slack, 32, 32);
+	tft->draw16bitRGBBitmap(134, 24, teams, 32, 32);
+	tft->draw16bitRGBBitmap(194, 24, outlook, 32, 32);
+	tft->draw16bitRGBBitmap(14, 59, chrome_personal, 32, 32);
+	tft->draw16bitRGBBitmap(74, 59, chrome_work, 32, 32);
+	tft->draw16bitRGBBitmap(134, 59, lastpass, 32, 32);
+	tft->draw16bitRGBBitmap(194, 59, spotify, 32, 32);
+	tft->draw16bitRGBBitmap(14, 94, anypoint, 32, 32);
+	tft->draw16bitRGBBitmap(74, 94, vscode, 32, 32);
+	tft->draw16bitRGBBitmap(134, 94, sublime, 32, 32);
+	tft->draw16bitRGBBitmap(194, 94, atom, 32, 32);
+	
 
 	ESP_LOGI("OLED", "All done!");
 
